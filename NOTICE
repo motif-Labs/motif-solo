@@ -1,0 +1,35 @@
+Motif Solo
+Copyright 2026 Motif Solo contributors
+
+Includes code from Motif, https://github.com/motif-Labs/motif
+Copyright 2026 The Motif Authors. Licensed under Apache License 2.0.
+Upstream revision: 8a3d3e672bf1306c808da2a36c79bdd76fa87242
+
+src/vendor/motif/schema.ts and readers/* were extracted from packages/core/src.
+Readers are modified to preserve source line provenance, tool errors, custom
+Codex tool calls, and Claude subagent transcripts. Synthetic Claude reader fixtures
+in tests/fixtures/claude-code originate from upstream. The Codex fixture is
+newly constructed synthetic input. src/search.ts adapts the query-term
+and excerpt-window helpers from packages/server/src/retrieval.ts.
+Secret patterns in src/privacy.ts adapt packages/cli/src/daemon/syncer.ts.
+See docs/motif-inspection.md for the reuse rationale and limitations.
+
+Upstream attribution and trademark notice
+----------------------------------------
+Motif
+Copyright 2026 The Motif Authors
+
+This product includes software developed as part of the Motif project
+(https://github.com/motif-Labs/motif), licensed under the Apache License,
+Version 2.0.
+
+Trademarks
+----------
+Motif is an independent project. It is not affiliated with, endorsed by, or
+sponsored by Anthropic, OpenAI, or Anysphere.
+
+Claude and Claude Code are trademarks of Anthropic, PBC. Codex is a trademark
+of OpenAI, Inc. Cursor is a trademark of Anysphere, Inc. These names
+and the accompanying marks reproduced in the dashboard are used solely to
+identify the tools Motif integrates with (nominative fair use). All trademarks
+are the property of their respective owners.

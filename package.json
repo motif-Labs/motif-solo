@@ -1,0 +1,77 @@
+{
+  "name": "motif-solo",
+  "version": "0.1.0",
+  "description": "An experience graph for coding agents. Connect code, Codex and Claude Code sessions, decisions, failures, and fixes.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "bin": {
+    "motif-solo": "dist/cli.js",
+    "rex": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "NOTICE",
+    "README.md",
+    "docs",
+    "CHANGELOG.md",
+    "SECURITY.md",
+    "CONTRIBUTING.md"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsup src/cli.ts --format esm --target node22 --clean",
+    "dev": "tsx src/cli.ts",
+    "test": "vitest run --testTimeout=20000 --maxWorkers=2",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm test && npm run build",
+    "prepack": "npm run build",
+    "format": "prettier --write src tests scripts docs .github *.md package.json tsconfig.json",
+    "format:check": "prettier --check src tests scripts docs .github *.md package.json tsconfig.json",
+    "privacy:check": "node scripts/privacy-check.mjs",
+    "package:check": "node scripts/package-check.mjs",
+    "demo": "npm run build && node scripts/demo.mjs",
+    "license:check": "node scripts/license-check.mjs"
+  },
+  "dependencies": {
+    "@iarna/toml": "^2.2.5",
+    "@modelcontextprotocol/sdk": "^1.25.0",
+    "better-sqlite3": "^12.0.0",
+    "commander": "^14.0.0",
+    "typescript": "^5.9.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^22.0.0",
+    "prettier": "^3.9.7",
+    "tsup": "^8.5.0",
+    "tsx": "^4.20.0",
+    "vitest": "^4.1.11"
+  },
+  "overrides": {
+    "esbuild": "^0.28.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/motif-Labs/motif-solo.git"
+  },
+  "homepage": "https://github.com/motif-Labs/motif-solo#readme",
+  "bugs": {
+    "url": "https://github.com/motif-Labs/motif-solo/issues"
+  },
+  "keywords": [
+    "codex",
+    "claude-code",
+    "mcp",
+    "experience-graph",
+    "code-graph",
+    "coding-agents",
+    "local-first"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,52 @@
+name: publish npm
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag, such as v0.1.0
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: npm-publish
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.repository == 'motif-Labs/motif-solo' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Validate tag input
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: '[[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]'
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ inputs.tag }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Verify version and main ancestry
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: |
+          test "v$(node -p 'require("./package.json").version')" = "$RELEASE_TAG"
+          git merge-base --is-ancestor HEAD origin/main
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          cache: npm
+      - run: npm install --global npm@11.6.2
+      - run: npm ci
+      - run: npm run check
+      - run: npm run format:check
+      - run: npm run privacy:check
+      - run: npm run package:check
+      - run: npm audit
+      - run: npm run license:check
+      - run: npm publish --access public --provenance
