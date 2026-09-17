@@ -24,12 +24,20 @@ export function inspectFiles(root, files) {
       errors.push(`${name}: session data outside synthetic fixtures`);
     }
     const file = path.join(root, name);
-    const stat = fs.lstatSync(file);
-    if (!stat.isFile()) {
-      errors.push(`${name}: non-regular source entry`);
-      continue;
+    let text;
+    const fd = fs.openSync(
+      file,
+      fs.constants.O_RDONLY | fs.constants.O_NOFOLLOW | fs.constants.O_NONBLOCK,
+    );
+    try {
+      if (!fs.fstatSync(fd).isFile()) {
+        errors.push(`${name}: non-regular source entry`);
+        continue;
+      }
+      text = fs.readFileSync(fd, "utf8");
+    } finally {
+      fs.closeSync(fd);
     }
-    const text = fs.readFileSync(file, "utf8");
     if (credential.test(text))
       errors.push(`${name}: credential-shaped content`);
     // Omit matching content from logs: finding a secret must not publish it again.

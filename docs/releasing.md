@@ -27,7 +27,7 @@ Create the matching GitHub environment. The workflow uses a GitHub-hosted runner
 
 ## Subsequent releases
 
-Run **publish npm** from the Actions tab on `main`, entering the existing release tag. The workflow checks the tag syntax, version, main ancestry, tests, formatting, source privacy, actual package contents, installation behavior, and dependencies before publishing. The environment can be configured with maintainer reviewers if desired.
+Run **publish npm** from the Actions tab on `main`, entering an existing release tag that points to the current `main` commit. The workflow checks the tag syntax, version, the exact workflow source commit and main ancestry, tests, formatting, source privacy, actual package contents, installation behavior, and dependencies before publishing. Dependency installation and checks run in a separate job without publishing permissions; the publish job only receives the validated tarball and runs no package lifecycle scripts. The environment can be configured with maintainer reviewers if desired.
 
 After publication, verify `npm view motif-solo version dist.integrity`, inspect the provenance on npm, and test `npx --yes motif-solo@X.Y.Z --help` in a fresh directory. Create GitHub release notes from CHANGELOG with the same version. Do not attach local graph databases, real-session exports, benchmark runs, or machine-specific logs.
 
